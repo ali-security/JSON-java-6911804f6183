@@ -489,7 +489,10 @@ public class XML {
         char initial = string.charAt(0);
         if ((initial >= '0' && initial <= '9') || initial == '-') {
             try {
-                return stringToNumber(string);
+                // over-long numeric values are kept as strings (CVE-2026-59171)
+                if (string.length() <= 1000) {
+                    return stringToNumber(string);
+                }
             } catch (Exception ignore) {
             }
         }
